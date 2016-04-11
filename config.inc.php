@@ -10,7 +10,10 @@ $vars = array(
     'PMA_PORT',
     'PMA_USER',
     'PMA_PASSWORD',
-    'PMA_ABSOLUTE_URI'
+    'PMA_ABSOLUTE_URI',
+    'PMA_CONFIG_DB_NAME',
+    'PMA_CONFIG_DB_USER',
+    'PMA_CONFIG_DB_PASSWORD',
 );
 foreach ($vars as $var) {
     if (!isset($_ENV[$var]) && getenv($var)) {
@@ -46,12 +49,17 @@ for ($i = 1; isset($hosts[$i - 1]); $i++) {
     if (isset($_ENV['PMA_PORT'])) {
         $cfg['Servers'][$i]['port'] = $_ENV['PMA_PORT'];
     }
-    if (isset($_ENV['PMA_USER'])) {                                
+    if (isset($_ENV['PMA_USER'])) {
         $cfg['Servers'][$i]['auth_type'] = 'config';
         $cfg['Servers'][$i]['user'] = $_ENV['PMA_USER'];
         $cfg['Servers'][$i]['password'] = isset($_ENV['PMA_PASSWORD']) ? $_ENV['PMA_PASSWORD'] : null;
     } else {
         $cfg['Servers'][$i]['auth_type'] = 'cookie';
+    }
+    if (isset($_ENV['PMA_CONFIG_DB_NAME'])) {
+      $cfg['Servers'][$i]['pmadb'] = $_ENV['PMA_CONFIG_DB_NAME'];
+      $cfg['Servers'][$i]['controluser'] = $_ENV['PMA_CONFIG_DB_USER'];
+      $cfg['Servers'][$i]['controlpass'] = $_ENV['PMA_CONFIG_DB_PASSWORD'];
     }
     $cfg['Servers'][$i]['connect_type'] = 'tcp';
     $cfg['Servers'][$i]['compress'] = false;
